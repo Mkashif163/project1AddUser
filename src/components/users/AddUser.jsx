@@ -1,35 +1,63 @@
-import React, { useState } from 'react';
+import { useState } from "react";
 
-import Card from '../UI/Card';
-import Button from '../UI/Button';
-import classes from './AddUser.module.css';
+import Card from "../UI/Card";
+import Button from "../UI/Button";
+import classes from "./AddUser.module.css";
+import UsersList from "./UsersList";
 
 const AddUser = (props) => {
-  const [enteredUsername, setEnteredUsername] = useState('');
-  const [enteredAge, setEnteredAge] = useState('');
+  const [user, setUser] = useState({
+    username: "",
+    age: "",
+  });
+
+
+
+  const userChangeHandler = (event) => {
+    setUser((prevState) => {
+      return {
+        ...prevState,
+        [event.target.id]: event.target.value,
+      };
+    });
+  };
 
   const addUserHandler = (event) => {
     event.preventDefault();
-    console.log(enteredUsername, enteredAge);
-  };
-
-  const usernameChangeHandler = (event) => {
-    setEnteredUsername(event.target.value);
-  };
-
-  const ageChangeHandler = (event) => {
-    setEnteredAge(event.target.value);
+    if (user.username.trim().length === 0 || user.age.trim().length === 0) {
+      return;
+    }
+    if (+user.age < 1) {
+      return;
+    }
+    props.onAddUser(user);
+    console.log(user);
+    setUser({
+      username: "",
+      age: "",
+    });
   };
 
   return (
     <Card className={classes.input}>
       <form onSubmit={addUserHandler}>
         <label htmlFor="username">Username</label>
-        <input id="username" type="text" onChange={usernameChangeHandler} />
+        <input
+          id="username"
+          type="text"
+          value={user.username}
+          onChange={userChangeHandler}
+        />
         <label htmlFor="age">Age (Years)</label>
-        <input id="age" type="number" onChange={ageChangeHandler} />
+        <input
+          id="age"
+          type="number"
+          value={user.age}
+          onChange={userChangeHandler}
+        />
         <Button type="submit">Add User</Button>
       </form>
+      <UsersList users={[user]} />
     </Card>
   );
 };
