@@ -3,15 +3,12 @@ import { useState } from "react";
 import Card from "../UI/Card";
 import Button from "../UI/Button";
 import classes from "./AddUser.module.css";
-import UsersList from "./UsersList";
 
 const AddUser = (props) => {
   const [user, setUser] = useState({
     username: "",
     age: "",
   });
-
-
 
   const userChangeHandler = (event) => {
     setUser((prevState) => {
@@ -31,7 +28,6 @@ const AddUser = (props) => {
       return;
     }
     props.onAddUser(user);
-    console.log(user);
     setUser({
       username: "",
       age: "",
@@ -57,7 +53,6 @@ const AddUser = (props) => {
         />
         <Button type="submit">Add User</Button>
       </form>
-      <UsersList users={[user]} />
     </Card>
   );
 };
